@@ -99,6 +99,23 @@ const calcDisplayBalance = function(movements){
 
 calcDisplayBalance(account1.movements);
 
+
+// The Magic of Chaining Methods
+// ---------------- CALCULATING THE SUMMARY --------------------
+
+const calcDisplaySummary = function(movements){
+  const incomes = movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes} RUP`;
+
+  const out = Math.abs(movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0));
+  labelSumOut.textContent = `${out} RUP`;
+
+  const interest = movements.filter(mov => mov > 0).map(mov => mov * 1.2/100).filter((mov, i, arr) => mov >= 1).reduce((acc,mov) => acc + mov, 0);
+  labelSumInterest.textContent = `${interest} RUP`;
+};
+
+calcDisplaySummary(account1.movements);
+
 // --------------- COMPUTING USERNAMES -------------------
 const createUsernames = function(accs){
   accs.forEach(function(acc){
