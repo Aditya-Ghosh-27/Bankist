@@ -72,7 +72,7 @@ const currencies = new Map([
 ]);
 
 
-// ------------ CREATING DOM ELEMENTS -----------------
+// ------------ CREATING DOM ELEMENTS(Manipulating the containerMovement) -----------------
 const displayMovements = function(movements){
   containerMovements.innerHTML = '';
 
