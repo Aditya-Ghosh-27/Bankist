@@ -103,18 +103,16 @@ calcDisplayBalance(account1.movements);
 // The Magic of Chaining Methods
 // ---------------- CALCULATING THE SUMMARY --------------------
 
-const calcDisplaySummary = function(movements){
-  const incomes = movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0);
+const calcDisplaySummary = function(acc){
+  const incomes = acc.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes} RUP`;
 
-  const out = Math.abs(movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0));
+  const out = Math.abs(acc.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0));
   labelSumOut.textContent = `${out} RUP`;
 
-  const interest = movements.filter(mov => mov > 0).map(mov => mov * 1.2/100).filter((mov, i, arr) => mov >= 1).reduce((acc,mov) => acc + mov, 0);
+  const interest = acc.filter(mov => mov > 0).map(mov => mov * acc.interestRate / 100).filter((mov, i, arr) => mov >= 1).reduce((acc,mov) => acc + mov, 0);
   labelSumInterest.textContent = `${interest} RUP`;
 };
-
-calcDisplaySummary(account1.movements);
 
 // --------------- COMPUTING USERNAMES -------------------
 const createUsernames = function(accs){
@@ -124,4 +122,34 @@ const createUsernames = function(accs){
 }
 createUsernames(accounts);
 console.log(accounts);
+
+// -------------- IMPLEMENTING LOGIN -------------------
+// --------------- EVENT HANDLER -----------------------
+let currentAccount;
+btnLogin.addEventListener('click', function(e){
+  // Prevent form from submitting
+  e.preventDefault();
+
+  currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
+
+  if(currentAccount?.pin === Number(inputLoginPin.value)){
+    // Display the UI and give the proper message
+    labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
+    containerApp.style.opacity = 100;
+
+    // Clear the input fields
+    inputLoginUsername.value = inputLoginPin.value = ``;
+    inputLoginPin.blur();
+
+    // Display movements
+    displayMovements(currentAccount.movements);
+
+    // Display balance
+    calcDisplayBalance(currentAccount.movements);
+
+    // Display summary 
+    calcDisplaySummary(currentAccount);
+
+  }
+});
 /////////////////////////////////////////////////
