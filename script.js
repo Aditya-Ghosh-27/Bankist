@@ -176,4 +176,27 @@ btnTransfer.addEventListener('click', function(e){
     updateUI(currentAccount);
   }
 });
+
+// Deleting the user by using findIndex and splice method
+btnClose.addEventListener('click', function(e){
+  // Prevent form from submitting
+  e.preventDefault();
+
+  if(currentAccount.username === inputCloseUsername.value && currentAccount.pin === Number(inputClosePin)){
+
+    // Finds the index that matches the entered username
+    const index = accounts.findIndex(acc => {
+      (acc.username === currentAccount.username)
+    });
+
+    // Deletes that particular user
+    accounts.splice(index, 1);
+
+    // Hide the UI
+    containerApp.style.opacity = 0;
+  }
+
+  // Reset the username and password field
+  inputCloseUsername.value = inputClosePin.value = '';
+})
 /////////////////////////////////////////////////
